@@ -17,7 +17,7 @@ public class UserService {
     UserRepository repository;
 
     public List<UserDTO> findAll(){
-        List<User> u =repository.findAll();
+        List<User> u = repository.findAll();
         List<UserDTO> userDTO = u.stream().map(UserDTO::new).toList();
         System.out.println(u);
         return userDTO;
@@ -33,5 +33,21 @@ public class UserService {
     }
     public User fromDTO(UserDTO userDTO){
         return new User(userDTO.getId(), userDTO.getName(), userDTO.getEmail());
+    }
+
+    public void delete(String id){
+        findById(id); //verifica se o user existe
+        repository.deleteById(id);
+    }
+
+    public User update(String  id, User user){
+        UserDTO newUser = findById(id);
+        updateData(newUser, user);
+        return repository.save(fromDTO(newUser));
+    }
+
+    private void updateData(UserDTO newUser, User user) {
+        newUser.setName(user.getName());
+        newUser.setEmail(user.getEmail());
     }
 }

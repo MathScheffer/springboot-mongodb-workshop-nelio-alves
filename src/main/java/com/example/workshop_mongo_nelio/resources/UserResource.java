@@ -36,12 +36,25 @@ public class UserResource {
         User user = service.fromDTO(userDTO);
         user = service.insert(user);
 
-        //Com o recurso abaixo, retornamos o objeto devidamente persistido.
+        //Com o recurso abaixo, retorna o caminho do recurso criado no response header
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(user.getId())
                 .toUri();
         //created = 201
         return ResponseEntity.created(uri).body(user);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable String id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody UserDTO userDTO) {
+        User user = service.fromDTO(userDTO);
+        user.setId(id);
+        service.update(id, user);
+        return ResponseEntity.ok(user);
     }
 }
