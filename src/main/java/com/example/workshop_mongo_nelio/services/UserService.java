@@ -23,14 +23,15 @@ public class UserService {
         return userDTO;
     }
 
-    public UserDTO findById(String id){
+    public User findById(String id){
         User user = repository.findById(id).orElseThrow(()-> new ObjectNotFoundException("User not found"));
-        return new UserDTO(user);
+        return user;
     }
 
     public User insert(User user){
         return repository.insert(user);
     }
+
     public User fromDTO(UserDTO userDTO){
         return new User(userDTO.getId(), userDTO.getName(), userDTO.getEmail());
     }
@@ -41,13 +42,13 @@ public class UserService {
     }
 
     public User update(String  id, User user){
-        UserDTO newUser = findById(id);
-        updateData(newUser, user);
-        return repository.save(fromDTO(newUser));
+        User dbUser = findById(id);
+        updateData(dbUser, user);
+        return repository.save(dbUser);
     }
 
-    private void updateData(UserDTO newUser, User user) {
-        newUser.setName(user.getName());
-        newUser.setEmail(user.getEmail());
+    private void updateData(User dbUser, User updatedUser) {
+        if(updatedUser.getName() != null) dbUser.setName(updatedUser.getName());
+        if(updatedUser.getEmail() != null) dbUser.setEmail(updatedUser.getEmail());
     }
 }

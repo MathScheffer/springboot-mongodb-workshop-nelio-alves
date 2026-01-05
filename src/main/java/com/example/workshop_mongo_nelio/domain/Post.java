@@ -1,10 +1,14 @@
 package com.example.workshop_mongo_nelio.domain;
 
+import com.example.workshop_mongo_nelio.dto.AuthorDTO;
+import com.example.workshop_mongo_nelio.dto.CommentDTO;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Document
@@ -16,12 +20,15 @@ public class Post  implements Serializable {
     private String title;
     private String body;
     private Date date;
-    private User author;
+    private List<CommentDTO> comments = new ArrayList<>();
+
+    private AuthorDTO author;
+
 
     public Post() {
     }
 
-    public Post(String id, String title, String body, Date date, User author) {
+    public Post(String id, String title, String body, Date date, AuthorDTO author) {
         this.id = id;
         this.title = title;
         this.body = body;
@@ -61,12 +68,20 @@ public class Post  implements Serializable {
         this.date = date;
     }
 
-    public User getAuthor() {
+    public AuthorDTO getAuthor() {
         return author;
     }
 
-    public void setAuthor(User author) {
+    public void setAuthor(AuthorDTO author) {
         this.author = author;
+    }
+
+    public List<CommentDTO> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<CommentDTO> comments) {
+        this.comments = comments;
     }
 
     @Override

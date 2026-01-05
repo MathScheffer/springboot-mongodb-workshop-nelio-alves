@@ -1,5 +1,6 @@
 package com.example.workshop_mongo_nelio.resources;
 
+import com.example.workshop_mongo_nelio.domain.Post;
 import com.example.workshop_mongo_nelio.domain.User;
 import com.example.workshop_mongo_nelio.dto.UserDTO;
 import com.example.workshop_mongo_nelio.services.UserService;
@@ -26,10 +27,17 @@ public class UserResource {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<UserDTO> findById(@PathVariable String id) {
-        UserDTO user = service.findById(id);
+    public ResponseEntity<User> findById(@PathVariable String id) {
+        User user = service.findById(id);
         return ResponseEntity.ok().body(user);
     }
+
+    @GetMapping(value = "/{id}/posts")
+    public ResponseEntity<List<Post>> findPostsByUserId(@PathVariable String id){
+        User user = service.findById(id);
+        return ResponseEntity.ok().body(user.getPosts());
+    }
+
 
     @PostMapping
     public ResponseEntity<User> postUser(@RequestBody UserDTO userDTO) {
@@ -50,6 +58,7 @@ public class UserResource {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
+
     @PutMapping(value = "/{id}")
     public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody UserDTO userDTO) {
         User user = service.fromDTO(userDTO);
